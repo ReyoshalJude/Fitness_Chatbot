@@ -1,4 +1,4 @@
-const API_BASE = "YOUR_BACKEND_URL_HERE";
+const API_BASE = "https://fitness-chatbot-80vp.onrender.com/";
 
 function addMessage(text, type) {
     const box = document.getElementById("chat-box");
