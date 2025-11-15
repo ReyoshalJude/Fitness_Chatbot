@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitBuddy - Offline Fitness Chatbot</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body { background: #f6f8fb; }
+        .user-msg {
+            background: #3b82f6;
+            color: white;
+            border-radius: 14px 14px 0 14px;
+        }
+        .bot-msg {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px 14px 14px 0;
+        }
+    </style>
+</head>
+
+<body class="flex justify-center p-4">
+
+    <div class="w-full max-w-2xl bg-white shadow-xl rounded-xl flex flex-col h-[90vh]">
+
+        <!-- Header -->
+        <div class="p-5 bg-blue-600 text-white rounded-t-xl">
+            <h1 class="text-2xl font-bold">FitBuddy</h1>
+            <p class="text-sm opacity-90">Offline Fitness Chatbot (Keyword Based)</p>
+        </div>
+
+        <!-- Chat Window -->
+        <div id="chat" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
+            <div class="bot-msg p-3 max-w-[80%] shadow">
+                <b>FitBuddy</b><br>
+                Hi! I'm FitBuddy. Ask me anything about workouts, diet, morning/evening routines, or motivation!
+            </div>
+        </div>
+
+        <!-- Input Bar -->
+        <div class="p-4 border-t flex gap-2">
+            <input id="input" type="text"
+                class="flex-1 p-3 border rounded-xl focus:ring-2 focus:ring-blue-500"
+                placeholder="Ask FitBuddy...">
+            <button onclick="sendMessage()"
+                class="bg-blue-600 text-white px-4 rounded-xl hover:bg-blue-700">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById("chat");
+        const input = document.getElementById("input");
+
+        function addMessage(text, sender) {
+            const div = document.createElement("div");
+            div.className = sender === "user"
+                ? "user-msg p-3 max-w-[80%] ml-auto shadow"
+                : "bot-msg p-3 max-w-[80%] shadow";
+
+            div.innerHTML = sender === "bot" ? `<b>FitBuddy</b><br>${text}` : text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // ------------------------
+        //  OFFLINE KEYWORD LOGIC
+        // ------------------------
+        function getResponse(msg) {
+            msg = msg.toLowerCase();
+
+            // GREETINGS
+            if (msg.includes("hello") || msg.includes("hi") || msg.includes("hey")) {
+                return "Hey there! 👋 How can I help you today — morning routine, evening routine, diet, or workouts?";
+            }
+
+            // MORNING WORKOUT
+            if (msg.includes("morning")) {
+                return (
+                    "🌞 *Morning Workout Plan:*\n" +
+                    "- 20 Jumping Jacks\n" +
+                    "- 15 Squats\n" +
+                    "- 10 Pushups\n" +
+                    "- 20 Mountain Climbers\n" +
+                    "- 30-second Plank\n\n" +
+                    "This wakes up your body and boosts your metabolism!"
+                );
+            }
+
+            // EVENING WORKOUT
+            if (msg.includes("evening")) {
+                return (
+                    "🌙 *Evening Workout Routine:*\n" +
+                    "- 10-minute warm-up walk\n" +
+                    "- 3 sets of: 15 squats, 12 pushups, 15 lunges\n" +
+                    "- 1-minute plank\n" +
+                    "- Light stretching\n\n" +
+                    "Great for unwinding after a long day!"
+                );
+            }
+
+            // GENERAL WORKOUT
+            if (msg.includes("workout") || msg.includes("exercise")) {
+                return "Here’s a simple full-body workout: 20 squats, 15 pushups, 20 lunges, 20 jumping jacks, and a 30-second plank.";
+            }
+
+            // MUSCLE GAIN
+            if (msg.includes("muscle") || msg.includes("gain")) {
+                return "To gain muscle, increase protein intake (eggs, chicken, paneer), lift progressively, and rest 7–8 hours.";
+            }
+
+            // FAT LOSS
+            if (msg.includes("fat") || msg.includes("lose") || msg.includes("weight")) {
+                return "For fat loss: eat high-protein foods, reduce sugar, walk 8k steps daily, and maintain a calorie deficit.";
+            }
+
+            // DIET
+            if (msg.includes("diet") || msg.includes("eat") || msg.includes("food")) {
+                return "Clean diet: oats/eggs for breakfast, rice + chicken for lunch, fruits for snacks, rotis + veggies for dinner.";
+            }
+
+            // MOTIVATION
+            if (msg.includes("motivation") || msg.includes("encourage")) {
+                return "You’ve got this! 💪 Consistency beats intensity. Show up every day and your future self will thank you.";
+            }
+
+            // DEFAULT
+            return "I’m not sure about that 😅 Try asking about morning workouts, evening workouts, diet, fat loss, or muscle gain!";
+        }
+
+        // SEND MESSAGE
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, "user");
+            input.value = "";
+
+            const botReply = getResponse(text);
+            addMessage(botReply, "bot");
+        }
+
+        input.addEventListener("keypress", e => {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+
+</body>
+</html>
